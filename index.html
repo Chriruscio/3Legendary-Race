@@ -1365,13 +1365,25 @@
             const idealTrackHeight = playerCount * minLaneHeight + 60;
             const maxTrackHeight = maxScreenHeight - 200; // Spazio per controlli
             
+            
+            
             // Usa il minore tra ideale e massimo
             let trackHeight = Math.min(idealTrackHeight, maxTrackHeight);
             
             // MOBILE: FORZA altezza per tutti i pokemon, FOTTITI i limiti!
             if (window.innerWidth <= 896) {
-                const forceHeight = playerCount * (pokemonSize + 25) + 80;
-                trackHeight = forceHeight; // FORZA senza limiti!
+                const isPortrait = window.innerHeight > window.innerWidth;
+                let spacing = pokemonSize + 25;
+                let padding = 80;
+                
+                // iPhone: più spazio per vedere tutti i pokemon
+                if (window.innerWidth <= 430) {
+                    spacing = pokemonSize + 35; // +10px di spazio tra corsie
+                    padding = isPortrait ? 120 : 100; // Più padding in verticale
+                }
+                
+                const forceHeight = playerCount * spacing + padding;
+                trackHeight = forceHeight;
             }
             
             const gameHeight = trackHeight + 160;
