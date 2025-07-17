@@ -1025,21 +1025,21 @@
             try {
                 backgroundMusic = new Audio();
                 
-                // La tua canzone Pokémon di Giorgio Vanni
-                backgroundMusic.src = 'https://www.dropbox.com/scl/fi/s7dc0yizqloskqrp6dqbi/pokemon-gotta-catch-em-all-giorgio-vanni-sigla-completa-_9HHju9_hMM.mp3?rlkey=fq6hspev2p2ur9mtvl9rfn0ik&st=zhflkmub&dl=1';
+                // Link Dropbox con download diretto per mobile
+                backgroundMusic.src = 'https://dl.dropboxusercontent.com/scl/fi/s7dc0yizqloskqrp6dqbi/pokemon-gotta-catch-em-all-giorgio-vanni-sigla-completa-_9HHju9_hMM.mp3?rlkey=fq6hspev2p2ur9mtvl9rfn0ik&st=zhflkmub';
                 backgroundMusic.loop = true;
                 backgroundMusic.volume = 0.3;
                 backgroundMusic.preload = 'auto';
                 
-                // Gestione eventi audio
                 backgroundMusic.addEventListener('canplaythrough', () => {
-                    console.log('🎵 Canzone Pokémon di Giorgio Vanni caricata!');
+                    console.log('🎵 Canzone Pokémon caricata! Tentativo autoplay...');
+                    // Prova autoplay appena caricata
+                    startMusicAutomatically();
                 });
                 
                 backgroundMusic.addEventListener('error', (e) => {
                     console.log('Errore nel caricamento della canzone:', e);
-                    document.getElementById('musicToggle').textContent = '🎵 Audio Non Disponibile';
-                    document.getElementById('musicToggle').disabled = true;
+                    document.getElementById('musicToggle').textContent = '🎵 Tocca per Audio';
                 });
                 
                 // Carica il file audio
@@ -1052,6 +1052,30 @@
             }
         }
 
+        // Funzione per avvio automatico
+        function startMusicAutomatically() {
+            if (backgroundMusic && !musicPlaying) {
+                backgroundMusic.play().then(() => {
+                    musicPlaying = true;
+                    document.getElementById('musicToggle').textContent = '🎵 Music ON';
+                    document.getElementById('musicToggle').classList.remove('muted');
+                    console.log('🎵 Canzone Pokémon avviata automaticamente!');
+                }).catch(error => {
+                    console.log('Autoplay bloccato dal browser:', error);
+                    document.getElementById('musicToggle').textContent = '🎵 Tocca per Audio';
+                    document.getElementById('musicToggle').style.background = '#FFD700';
+                    document.getElementById('musicToggle').style.color = '#000';
+                });
+            }
+        }
+
+        // Prova autoplay anche al primo click/touch
+        document.addEventListener('click', function enableAudio() {
+            if (!musicPlaying && backgroundMusic) {
+                startMusicAutomatically();
+                document.removeEventListener('click', enableAudio);
+            }
+        }, { once: true });
         
 
         function toggleMusic() {
