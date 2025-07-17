@@ -713,7 +713,32 @@
             50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
             100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
-
+        @media (max-width: 1024px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            
+            .controls-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 3px solid #8B4513;
+                max-height: 250px;
+                padding: 15px;
+            }
+            
+            .title {
+                font-size: 22px;
+            }
+            
+            .game-container {
+                max-height: 70vh;
+                min-height: 400px;
+            }
+            
+            .race-track {
+                max-height: calc(70vh - 200px);
+            }
+        }
         /* Responsive */
         @media (max-width: 768px) {
             .title-header {
@@ -996,28 +1021,28 @@
             targetDistance: 0 // Distanza target per il traguardo
         };
 
-        // Sistema audio con compatibilità mobile
         function initAudio() {
             try {
                 backgroundMusic = new Audio();
                 
-                // URL audio Pokémon funzionante
-                backgroundMusic.src = 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav';
+                // La tua canzone Pokémon di Giorgio Vanni
+                backgroundMusic.src = 'https://www.dropbox.com/scl/fi/s7dc0yizqloskqrp6dqbi/pokemon-gotta-catch-em-all-giorgio-vanni-sigla-completa-_9HHju9_hMM.mp3?rlkey=fq6hspev2p2ur9mtvl9rfn0ik&st=zhflkmub&dl=1';
                 backgroundMusic.loop = true;
                 backgroundMusic.volume = 0.3;
                 backgroundMusic.preload = 'auto';
                 
-                // Per mobile - deve essere attivato da user gesture
+                // Gestione eventi audio
                 backgroundMusic.addEventListener('canplaythrough', () => {
-                    console.log('Audio caricato e pronto!');
+                    console.log('🎵 Canzone Pokémon di Giorgio Vanni caricata!');
                 });
                 
                 backgroundMusic.addEventListener('error', (e) => {
-                    console.log('Errore audio:', e);
-                    // Prova URL alternativo
-                    backgroundMusic.src = 'https://opengameart.org/sites/default/files/Pokemon%20Center%20-%20Pokemon%20RBYGSC.mp3';
+                    console.log('Errore nel caricamento della canzone:', e);
+                    document.getElementById('musicToggle').textContent = '🎵 Audio Non Disponibile';
+                    document.getElementById('musicToggle').disabled = true;
                 });
                 
+                // Carica il file audio
                 backgroundMusic.load();
                 
             } catch (error) {
@@ -1206,7 +1231,7 @@
                 input.placeholder = `Nome per ${pokemon.name}`;
                 input.addEventListener('input', (e) => {
                     pokemon.playerName = e.target.value || `Giocatore ${index + 1}`;
-                    updatePlayerNameLabels();
+                    
                 });
                 
                 inputDiv.appendChild(img);
