@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏁 3Legendary-Race</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Loghi 3LEGENDARY sparsi nello sfondo */
+        .logo-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .logo-item {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background-image: url('https://i.postimg.cc/GtKkTy3X/Immagine-Whats-App-2025-06-14-ore-00-02-04-fc7b7146.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 1.0;
+            border-radius: 50%;
+            filter: drop-shadow(0 12px 24px rgba(0,0,0,0.8)) brightness(0.75) contrast(1.4);
+            animation: logo-float 15s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        /* Titolo fisso in alto */
+        .title-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-bottom: 5px solid #8B4513;
+            padding: 10px 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #8B4513;
+            text-shadow: 2px 2px 0px #FFF;
+            margin: 0;
+            flex: 1;
+        }
+
+        /* Controlli audio */
+        .audio-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .audio-button {
+            background: #32CD32;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .audio-button:hover {
+            background: #228B22;
+            transform: translateY(-2px);
+        }
+
+        .audio-button.muted {
+            background: #FF4444;
+        }
+
+        .audio-button.muted:hover {
+            background: #CC0000;
+        }
+
+        .volume-control {
+            width: 80px;
+            height: 5px;
+            background: #ddd;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-control::-webkit-slider-thumb {
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #32CD32;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* Layout principale */
+        .main-layout {
+            display: flex;
+            min-height: 100vh;
+            padding-top: 80px; /* Spazio per titolo fisso */
+        }
+
+        /* Pannello controlli laterale sinistro */
+        .controls-sidebar {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            border-right: 3px solid #8B4513;
+            padding: 20px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+            max-height: calc(100vh - 80px);
+        }
+
+        .controls-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .controls-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .controls-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2F7D32;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Area di gara massimizzata */
+        .race-area {
+            flex: 1;
+            position: relative;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 80px);
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            max-width: 1600px;
+            min-height: 600px;
+            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+            border-radius: 20px;
+            border: 5px solid #8B4513;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* Controlli giocatori */
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .player-count {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .player-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .player-buttons button {
+            background: #32CD32;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .player-buttons button:hover {
+            background: #228B22;
+            transform: translateY(-2px);
+        }
+
+        .player-buttons button.remove {
+            background: #FF4444;
+        }
+
+        .player-buttons button.remove:hover {
+            background: #CC0000;
+        }
+
+        /* Input nomi giocatori */
+        .player-name-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 10px;
+        }
+        /* Container con scroll per input giocatori */
+        #playerNamesContainer {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Scrollbar personalizzata stile Pokémon */
+        #playerNamesContainer::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #playerNamesContainer::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        #playerNamesContainer::-webkit-scrollbar-thumb {
+            background: #32CD32;
+            border-radius: 4px;
+        }
+
+        #playerNamesContainer::-webkit-scrollbar-thumb:hover {
+            background: #228B22;
+        }
+        .player-name-input img {
+            width: 35px;
+            height: 35px;
+            margin-right: 10px;
+        }
+
+        .player-name-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .player-name-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            background: #f5f5f5;
+            padding: 6px;
+            border-radius: 8px;
+            min-height: 50px;
+        }
+
+        .player-name-input img {
+            width: 30px;
+            height: 30px;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        .player-name-input input {
+            flex: 1;
+            padding: 6px 8px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: border-color 0.2s;
+            min-width: 0;
+        }
+
+        .player-name-input input:focus {
+            outline: none;
+            border-color: #32CD32;
+        }
+        
+        /* Impostazioni durata */
+        .duration-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .duration-controls input {
+            width: 70px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .duration-controls button {
+            background: #32CD32;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .duration-controls button:hover {
+            background: #228B22;
+            transform: translateY(-2px);
+        }
+
+        /* Timer della gara */
+        .race-timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #FF6B6B, #FF4444);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 5px 20px rgba(255,0,0,0.3);
+        }
+
+        /* Nuvole */
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50px;
+            opacity: 0.8;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .cloud1 {
+            width: 120px;
+            height: 50px;
+            top: 30px;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .cloud1::before {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 40px;
+            background: white;
+            border-radius: 50px;
+            top: -20px;
+            left: 30px;
+        }
+
+        .cloud2 {
+            width: 100px;
+            height: 40px;
+            top: 50px;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .cloud2::before {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 35px;
+            background: white;
+            border-radius: 50px;
+            top: -18px;
+            left: 25px;
+        }
+
+        .cloud3 {
+            width: 80px;
+            height: 35px;
+            top: 80px;
+            left: 40%;
+            animation-delay: 4s;
+        }
+
+        .cloud3::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            background: white;
+            border-radius: 50px;
+            top: -15px;
+            left: 20px;
+        }
+
+        /* Bandiera traguardo */
+        .finish-flag {
+            position: absolute;
+            top: 20px;
+            right: 50px;
+            width: 80px;
+            height: 120px;
+            z-index: 60;
+        }
+
+        .flag-pole {
+            position: absolute;
+            right: 20px;
+            top: 0;
+            width: 8px;
+            height: 120px;
+            background: #8B4513;
+            border-radius: 4px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+        }
+
+        .flag {
+            position: absolute;
+            right: 28px;
+            top: 0;
+            width: 50px;
+            height: 35px;
+            background: repeating-linear-gradient(
+                0deg,
+                #000 0px, #000 7px,
+                #FFF 7px, #FFF 14px
+            );
+            border: 2px solid #333;
+            clip-path: polygon(0 0, 80% 0, 80% 40%, 90% 50%, 80% 60%, 80% 100%, 0 100%);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+            animation: flag-wave 2s ease-in-out infinite;
+        }
+
+        @keyframes flag-wave {
+            0%, 100% { transform: scaleX(1); }
+            50% { transform: scaleX(0.95); }
+        }
+
+        /* Pista da corsa */
+        .race-track {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            right: 40px;
+            min-height: 300px;
+            max-height: calc(80vh - 200px);
+            background: linear-gradient(180deg, #32CD32 0%, #228B22 50%, #1E7B1E 100%);
+            border-radius: 20px;
+            border: 5px solid #2F7D32;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.2), 0 5px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* Texture erba */
+        .grass-texture {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(46,125,50,0.4) 1px, transparent 1px),
+                radial-gradient(circle at 35% 45%, rgba(46,125,50,0.3) 1px, transparent 1px),
+                radial-gradient(circle at 65% 35%, rgba(46,125,50,0.4) 1px, transparent 1px),
+                radial-gradient(circle at 85% 65%, rgba(46,125,50,0.3) 1px, transparent 1px);
+            background-size: 40px 30px, 60px 40px, 50px 35px, 45px 25px;
+            animation: grass-sway 8s ease-in-out infinite;
+        }
+
+        @keyframes grass-sway {
+            0%, 100% { transform: translateX(0px); }
+            50% { transform: translateX(2px); }
+        }
+
+        /* Pokeball sparse sul campo */
+        .pokeball {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #333;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+            z-index: 15;
+            animation: pokeball-spin 8s linear infinite;
+        }
+
+        /* Pokeball normale */
+        .pokeball.normal {
+            background: linear-gradient(180deg, #FF0000 0%, #FF0000 45%, #000 45%, #000 55%, #FFF 55%, #FFF 100%);
+        }
+
+        /* Master Ball */
+        .pokeball.master {
+            background: linear-gradient(180deg, #8B00FF 0%, #8B00FF 45%, #000 45%, #000 55%, #FFD700 55%, #FFD700 100%);
+        }
+
+        /* Ultra Ball */
+        .pokeball.ultra {
+            background: linear-gradient(180deg, #FFD700 0%, #FFD700 45%, #000 45%, #000 55%, #C0C0C0 55%, #C0C0C0 100%);
+        }
+
+        .pokeball::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            background: #FFF;
+            border: 1px solid #333;
+            border-radius: 50%;
+        }
+
+        .pokeball::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #333;
+            z-index: 1;
+        }
+
+        @keyframes pokeball-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .track-lanes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 5;
+        }
+
+        .lane-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(46,125,50,0.6);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .finish-line {
+            position: absolute;
+            right: 30px;
+            top: 0;
+            bottom: 0;
+            width: 20px;
+            background: repeating-linear-gradient(
+                0deg,
+                #000 0px, #000 20px,
+                #FFF 20px, #FFF 40px
+            );
+            border: 3px solid #333;
+            box-shadow: 0 0 15px rgba(0,0,0,0.6);
+            z-index: 10;
+        }
+
+        /* Pokémon */
+        .pokemon {
+            position: absolute;
+            z-index: 40;
+            transition: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pokemon img {
+            object-fit: contain;
+            image-rendering: pixelated;
+            animation: idle 2s ease-in-out infinite;
+        }
+
+        @keyframes idle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .pokemon.running img {
+            animation: run 0.4s ease-in-out infinite;
+        }
+
+        @keyframes run {
+            0% { transform: translateY(0px) scaleX(1); }
+            25% { transform: translateY(-8px) scaleX(1.05); }
+            50% { transform: translateY(-2px) scaleX(0.95); }
+            75% { transform: translateY(-10px) scaleX(1.1); }
+            100% { transform: translateY(0px) scaleX(1); }
+        }
+
+        .pokemon.boost {
+            filter: brightness(1.5) drop-shadow(0 0 15px #FFD700);
+        }
+
+        .pokemon.stumble {
+            filter: brightness(0.5) saturate(0.3) hue-rotate(20deg);
+        }
+
+        .pokemon.super-boost {
+            filter: brightness(2) drop-shadow(0 0 25px #FF1493) saturate(1.5);
+        }
+
+        .pokemon.mega-boost {
+            filter: brightness(2.5) drop-shadow(0 0 35px #00FFFF) saturate(2);
+            animation: mega-boost-pulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes mega-boost-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Nomi giocatori */
+        .player-name-label {
+            position: absolute;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 45;
+            pointer-events: none;
+            white-space: nowrap;
+            border: 2px solid #FFD700;
+            top: 50%;
+            right: -10px;
+            transform: translate(100%, -50%);
+        }
+
+        /* Pulsante Start */
+        .start-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #32CD32, #228B22);
+            border: 3px solid #1E7B1E;
+            border-radius: 15px;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .start-btn:hover {
+            background: linear-gradient(135deg, #228B22, #1E7B1E);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .start-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Banner vittoria */
+        .victory-banner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #F5DEB3;
+            border: 5px solid #8B4513;
+            border-radius: 30px;
+            padding: 30px 70px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #8B4513;
+            text-align: center;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+            z-index: 2000;
+            animation: victory-appear 1s ease-out;
+        }
+
+        @keyframes victory-appear {
+            0% { transform: translate(-50%, -50%) scale(0.3) rotate(-180deg); opacity: 0; }
+            70% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* Countdown */
+        .countdown {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 200px;
+            font-weight: bold;
+            color: #FF6B6B;
+            text-shadow: 8px 8px 16px rgba(0,0,0,0.8);
+            z-index: 3000;
+            animation: countdown-bounce 1s ease-out;
+        }
+
+        @keyframes countdown-bounce {
+            0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            
+            .controls-sidebar {
+            width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            border-right: 3px solid #8B4513;
+            padding: 20px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+            max-height: calc(100vh - 80px);
+        }
+            
+            .title {
+                font-size: 24px;
+            }
+            
+            .game-container {
+            position: relative;
+            width: 100%;
+            max-width: 1600px;
+            min-height: 400px;
+            max-height: 80vh;
+            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+            border-radius: 20px;
+            border: 5px solid #8B4513;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 20px;
+            }
+            
+            .game-container {
+                height: 50vh;
+                min-height: 350px;
+            }
+            
+            .pokemon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .pokemon img {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .race-timer {
+                font-size: 20px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Titolo fisso in alto -->
+    <div class="title-header">
+        <div style="width: 120px;"></div> <!-- Spacer -->
+        <h1 class="title">🏆 3Legendary-Race 🏆</h1>
+        <div class="audio-controls">
+            <button class="audio-button" id="musicToggle" onclick="toggleMusic()">🎵 Music ON</button>
+            <input type="range" class="volume-control" id="volumeSlider" min="0" max="100" value="30" onchange="changeVolume()">
+        </div>
+    </div>
+
+    <div class="main-layout">
+        <!-- Pannello controlli laterale -->
+        <div class="controls-sidebar">
+            <!-- Sezione giocatori -->
+            <div class="controls-section">
+                <div class="controls-title">
+                    <span>👥</span>
+                    <span>Giocatori</span>
+                </div>
+                
+                <div class="player-controls">
+                    <div class="player-count">Numero: <span id="playerCount">4</span></div>
+                    <div class="player-buttons">
+                        <button onclick="addPlayer()">+ Aggiungi</button>
+                        <button onclick="removePlayer()" class="remove">- Rimuovi</button>
+                    </div>
+                </div>
+                
+                <div id="playerNamesContainer"></div>
+            </div>
+            
+            <!-- Sezione durata -->
+            <div class="controls-section">
+                <div class="controls-title">
+                    <span>⏱️</span>
+                    <span>Durata gara</span>
+                </div>
+                
+                <div class="duration-controls">
+                    <input type="number" id="durationInput" value="30" min="10" max="600">
+                    <span>secondi</span>
+                    <button onclick="setDuration()">Imposta</button>
+                </div>
+            </div>
+            
+            <!-- Sezione start -->
+            <div class="controls-section">
+                <button class="start-btn" onclick="startRace()">🏁 START RACE!</button>
+            </div>
+        </div>
+
+        <!-- Area di gara massimizzata -->
+        <div class="race-area">
+            <div class="game-container">
+                <!-- Nuvole -->
+                <div class="cloud cloud1"></div>
+                <div class="cloud cloud2"></div>
+                <div class="cloud cloud3"></div>
+
+                <!-- Timer gara -->
+                <div class="race-timer" id="raceTimer">⏱️ 30.0s</div>
+
+                <!-- Pista da corsa -->
+                <div class="race-track">
+                    <div class="grass-texture"></div>
+                    <div class="track-lanes" id="trackLanes"></div>
+                    <div class="finish-line"></div>
+                    <!-- Pokémon container -->
+                    <div id="pokemonContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lista Pokémon disponibili
+        const availablePokemon = [
+            { id: 'pikachu', name: 'Pikachu', sprite: 25 },
+            { id: 'charmander', name: 'Charmander', sprite: 4 },
+            { id: 'squirtle', name: 'Squirtle', sprite: 7 },
+            { id: 'bulbasaur', name: 'Bulbasaur', sprite: 1 },
+            { id: 'eevee', name: 'Eevee', sprite: 133 },
+            { id: 'psyduck', name: 'Psyduck', sprite: 54 },
+            { id: 'jigglypuff', name: 'Jigglypuff', sprite: 39 },
+            { id: 'meowth', name: 'Meowth', sprite: 52 },
+            { id: 'snorlax', name: 'Snorlax', sprite: 143 },
+            { id: 'ditto', name: 'Ditto', sprite: 132 },
+            { id: 'mew', name: 'Mew', sprite: 151 },
+            { id: 'cyndaquil', name: 'Cyndaquil', sprite: 155 },
+            { id: 'totodile', name: 'Totodile', sprite: 158 },
+            { id: 'chikorita', name: 'Chikorita', sprite: 152 },
+            { id: 'togepi', name: 'Togepi', sprite: 175 }
+        ];
+
+        let pokemonData = [];
+        let currentPlayerCount = 4;
+        let backgroundMusic = null;
+        let musicPlaying = false;
+
+        let gameState = {
+            racing: false,
+            finished: false,
+            raceDistance: 0,
+            startTime: 0,
+            raceTimer: null,
+            raceDuration: 30,
+            endTime: 0,
+            frameCount: 0,
+            plotTwistTimer: 0,
+            lastEventFrame: 0,
+            finalSprintTriggered: false,
+            baseVelocityPerFrame: 0, // Velocità base per frame per finire esattamente al tempo
+            targetDistance: 0 // Distanza target per il traguardo
+        };
+
+        // Sistema audio con avvio automatico
+        function initAudio() {
+            try {
+                backgroundMusic = new Audio();
+                
+                // La tua canzone Pokémon di Giorgio Vanni
+                backgroundMusic.src = 'https://www.dropbox.com/scl/fi/s7dc0yizqloskqrp6dqbi/pokemon-gotta-catch-em-all-giorgio-vanni-sigla-completa-_9HHju9_hMM.mp3?rlkey=fq6hspev2p2ur9mtvl9rfn0ik&st=zhflkmub&dl=1';
+                backgroundMusic.loop = true;
+                backgroundMusic.volume = 0.3;
+                
+                backgroundMusic.addEventListener('canplaythrough', () => {
+                    console.log('Canzone Pokémon caricata e pronta!');
+                    // Prova l'avvio automatico quando il file è pronto
+                    startMusicAutomatically();
+                });
+                
+                backgroundMusic.addEventListener('error', (e) => {
+                    console.log('Errore nel caricamento della canzone:', e);
+                    document.getElementById('musicToggle').textContent = '🎵 Audio Non Disponibile';
+                });
+                
+                // Carica il file audio
+                backgroundMusic.load();
+                
+            } catch (error) {
+                console.log('Audio non supportato:', error);
+            }
+        }
+
+        // Funzione per avviare automaticamente la musica
+        function startMusicAutomatically() {
+            if (backgroundMusic && !musicPlaying) {
+                backgroundMusic.play().then(() => {
+                    musicPlaying = true;
+                    const button = document.getElementById('musicToggle');
+                    button.textContent = '🎵 Music ON';
+                    button.classList.remove('muted');
+                    console.log('🎵 Canzone Pokémon avviata automaticamente!');
+                }).catch(error => {
+                    console.log('Avvio automatico bloccato dal browser:', error);
+                    console.log('Clicca il pulsante per avviare la musica');
+                    // Fallback: se l'autoplay è bloccato, mostra un messaggio
+                    const button = document.getElementById('musicToggle');
+                    button.textContent = '🎵 Click per musica';
+                    button.style.background = '#FFD700';
+                    button.style.color = '#000';
+                });
+            }
+        }
+
+        // Aggiungi evento click per permettere l'avvio anche se autoplay fallisce
+        document.addEventListener('click', function enableAudio() {
+            if (!musicPlaying && backgroundMusic) {
+                startMusicAutomatically();
+                document.removeEventListener('click', enableAudio);
+            }
+        }, { once: true });
+
+        function toggleMusic() {
+            const button = document.getElementById('musicToggle');
+            
+            if (musicPlaying) {
+                if (backgroundMusic) {
+                    backgroundMusic.pause();
+                }
+                musicPlaying = false;
+                button.textContent = '🎵 Music OFF';
+                button.classList.add('muted');
+                button.style.background = '#FF4444';
+                console.log('Canzone Pokémon fermata');
+            } else {
+                if (backgroundMusic) {
+                    backgroundMusic.play().then(() => {
+                        musicPlaying = true;
+                        button.textContent = '🎵 Music ON';
+                        button.classList.remove('muted');
+                        button.style.background = '#32CD32';
+                        button.style.color = 'white';
+                        console.log('Canzone Pokémon avviata!');
+                    }).catch(error => {
+                        console.log('Impossibile riprodurre la canzone:', error);
+                        button.textContent = '🎵 Click per attivare';
+                    });
+                } else {
+                    console.log('Audio non inizializzato');
+                }
+            }
+        }
+
+        function changeVolume() {
+            if (backgroundMusic) {
+                const volume = document.getElementById('volumeSlider').value / 100;
+                backgroundMusic.volume = volume;
+                console.log('Volume canzone Pokémon:', volume);
+            }
+        }
+
+        function generateBackgroundLogos() {
+            const container = document.createElement('div');
+            container.className = 'logo-background';
+            
+            // Numero fisso di loghi più visibili (ridotto)
+            const logoCount = 12;
+            
+            // Definisci zone preferite per i loghi (evitando centro e sovrapposizioni)
+            const zones = [
+                // Angoli
+                { x: 0.05, y: 0.05, spread: 0.15 },  // Top-left
+                { x: 0.95, y: 0.05, spread: 0.15 },  // Top-right  
+                { x: 0.05, y: 0.95, spread: 0.15 },  // Bottom-left
+                { x: 0.95, y: 0.95, spread: 0.15 },  // Bottom-right
+                
+                // Lati
+                { x: 0.15, y: 0.5, spread: 0.2 },   // Left side
+                { x: 0.85, y: 0.5, spread: 0.2 },   // Right side
+                { x: 0.5, y: 0.1, spread: 0.2 },    // Top side
+                { x: 0.5, y: 0.9, spread: 0.2 },    // Bottom side
+                
+                // Zone intermedie
+                { x: 0.25, y: 0.25, spread: 0.1 },
+                { x: 0.75, y: 0.25, spread: 0.1 },
+                { x: 0.25, y: 0.75, spread: 0.1 },
+                { x: 0.75, y: 0.75, spread: 0.1 }
+            ];
+            
+            for (let i = 0; i < logoCount; i++) {
+                const logo = document.createElement('div');
+                logo.className = 'logo-item';
+                
+                // Seleziona zona per questo logo
+                const zone = zones[i % zones.length];
+                
+                // Calcola posizione con variazione organica nella zona
+                const spreadX = (Math.random() - 0.5) * zone.spread * window.innerWidth;
+                const spreadY = (Math.random() - 0.5) * zone.spread * window.innerHeight;
+                
+                const x = Math.max(60, Math.min(window.innerWidth - 180, 
+                    zone.x * window.innerWidth + spreadX));
+                const y = Math.max(60, Math.min(window.innerHeight - 180, 
+                    zone.y * window.innerHeight + spreadY));
+                
+                logo.style.left = x + 'px';
+                logo.style.top = y + 'px';
+                
+                // Rotazione leggermente casuale per naturalezza
+                logo.style.transform = `rotate(${(Math.random() - 0.5) * 30}deg)`;
+                
+                // Ritardo animazione distribuito
+                logo.style.animationDelay = `${i * 1.2}s`;
+                
+                // Dimensione ancora più grande e variabile
+                const size = 200 + Math.random() * 40; // 200-240px
+                logo.style.width = size + 'px';
+                logo.style.height = size + 'px';
+                
+                container.appendChild(logo);
+            }
+            
+            // Inserisce i loghi come primo elemento del body
+            document.body.insertBefore(container, document.body.firstChild);
+        }
+
+        // Inizializza gioco
+        function initGame() {
+            setupPlayers(currentPlayerCount);
+            updateLayout();
+            updatePlayerNamesPanel();
+            calculateRaceParameters();
+            initAudio();
+            generateBackgroundLogos();
+        }
+
+        // Calcola velocità base matematicamente precisa
+        function calculateRaceParameters() {
+            const container = document.querySelector('.race-track');
+            if (container) {
+                const containerWidth = container.offsetWidth;
+                
+                // Distanza fino al traguardo (lasciamo spazio per la linea di arrivo)
+                gameState.targetDistance = containerWidth - 100;
+                gameState.raceDistance = gameState.targetDistance;
+                
+                // Calcola velocità base necessaria per finire esattamente al tempo impostato
+                const fps = 60; // Frame per secondo
+                const totalFrames = gameState.raceDuration * fps;
+                gameState.baseVelocityPerFrame = gameState.targetDistance / totalFrames;
+                
+                console.log(`Gara ${gameState.raceDuration}s: Distanza ${gameState.targetDistance}px, Velocità base ${gameState.baseVelocityPerFrame.toFixed(3)} px/frame`);
+            }
+        }
+
+        // Configura giocatori
+        function setupPlayers(count) {
+            pokemonData = [];
+            for (let i = 0; i < count; i++) {
+                const pokemon = availablePokemon[i];
+                pokemonData.push({
+                    id: pokemon.id,
+                    name: pokemon.name,
+                    sprite: pokemon.sprite,
+                    element: null,
+                    position: 50,
+                    velocity: 0,
+                    acceleration: 0,
+                    effectFrames: 0,
+                    effectType: null,
+                    lastBoostFrame: 0,
+                    playerName: `Giocatore ${i + 1}`,
+                    stamina: 100,
+                    luck: Math.random() * 0.5 + 0.5,
+                    comebackPower: Math.random() * 0.3 + 0.2
+                });
+            }
+        }
+
+        // Aggiorna pannello nomi giocatori
+        function updatePlayerNamesPanel() {
+            const container = document.getElementById('playerNamesContainer');
+            container.innerHTML = '';
+            
+            pokemonData.forEach((pokemon, index) => {
+                const inputDiv = document.createElement('div');
+                inputDiv.className = 'player-name-input';
+                
+                const img = document.createElement('img');
+                img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.sprite}.png`;
+                img.alt = pokemon.name;
+                
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = pokemon.playerName;
+                input.placeholder = `Nome per ${pokemon.name}`;
+                input.addEventListener('input', (e) => {
+                    pokemon.playerName = e.target.value || `Giocatore ${index + 1}`;
+                    updatePlayerNameLabels();
+                });
+                
+                inputDiv.appendChild(img);
+                inputDiv.appendChild(input);
+                container.appendChild(inputDiv);
+            });
+        }
+
+        // Aggiorna etichette nomi durante la gara
+        function updatePlayerNameLabels() {
+            pokemonData.forEach((pokemon, index) => {
+                const existingLabel = document.getElementById(`name-${pokemon.id}`);
+                if (existingLabel) {
+                    existingLabel.textContent = pokemon.playerName;
+                }
+            });
+        }
+
+        // Aggiorna layout dinamico
+        function updateLayout() {
+            const container = document.getElementById('pokemonContainer');
+            const lanesContainer = document.getElementById('trackLanes');
+            const gameContainer = document.querySelector('.game-container');
+            const raceTrack = document.querySelector('.race-track');
+            
+            // Pulisci container
+            container.innerHTML = '';
+            lanesContainer.innerHTML = '';
+            
+            // Calcolo dinamico delle dimensioni basato sul numero di giocatori
+            const playerCount = pokemonData.length;
+            const maxScreenHeight = window.innerHeight * 0.8; // 80% dell'altezza schermo
+            
+            // Calcola dimensioni Pokémon dinamiche (da 130px a 70px)
+            let pokemonSize;
+            if (playerCount <= 4) {
+                pokemonSize = 130; // Dimensione massima
+            } else if (playerCount <= 8) {
+                pokemonSize = 110; // Dimensione media
+            } else if (playerCount <= 12) {
+                pokemonSize = 90; // Dimensione ridotta
+            } else {
+                pokemonSize = 70; // Dimensione minima
+            }
+            
+            // Calcola altezza corsia dinamica
+            const minLaneHeight = pokemonSize + 20; // Pokémon + spazio buffer
+            const idealTrackHeight = playerCount * minLaneHeight + 60;
+            const maxTrackHeight = maxScreenHeight - 200; // Spazio per controlli
+            
+            // Usa il minore tra ideale e massimo
+            const trackHeight = Math.min(idealTrackHeight, maxTrackHeight);
+            const gameHeight = trackHeight + 160;
+            
+            // Applica dimensioni calcolate
+            gameContainer.style.height = `${Math.min(gameHeight, maxScreenHeight)}px`;
+            raceTrack.style.height = `${trackHeight}px`;
+            
+            console.log(`👥 ${playerCount} giocatori | 🎮 Pokémon: ${pokemonSize}px | 🏁 Pista: ${trackHeight}px`);
+            
+            // Ricalcola parametri gara
+            setTimeout(() => {
+                calculateRaceParameters();
+            }, 100);
+
+            // Calcola altezza delle corsie effettiva
+            const laneHeight = trackHeight / playerCount;
+            
+            // Crea corsie e posiziona Pokémon
+            pokemonData.forEach((pokemon, index) => {
+                const laneY = index * laneHeight;
+                const centerY = laneY + (laneHeight / 2) - (pokemonSize / 2);
+                
+                // Crea corsia (linea divisoria) solo se ci sono più di 2 giocatori e non è la prima corsia
+                if (playerCount > 2 && index > 0) {
+                    const laneLine = document.createElement('div');
+                    laneLine.className = 'lane-line';
+                    laneLine.style.top = laneY + 'px';
+                    lanesContainer.appendChild(laneLine);
+                }
+                
+                // Crea elemento Pokémon con dimensioni dinamiche
+                const pokemonEl = document.createElement('div');
+                pokemonEl.className = 'pokemon';
+                pokemonEl.id = pokemon.id;
+                pokemonEl.style.left = '50px';
+                pokemonEl.style.top = centerY + 'px';
+                
+                // Applica dimensioni dinamiche
+                pokemonEl.style.width = `${pokemonSize}px`;
+                pokemonEl.style.height = `${pokemonSize}px`;
+                
+                const img = document.createElement('img');
+                img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.sprite}.png`;
+                img.alt = pokemon.name;
+                
+                // Applica dimensioni dinamiche all'immagine
+                img.style.width = `${pokemonSize}px`;
+                img.style.height = `${pokemonSize}px`;
+                
+                pokemonEl.appendChild(img);
+                
+                container.appendChild(pokemonEl);
+                
+                // Aggiorna reference
+                pokemon.element = pokemonEl;
+                pokemon.position = 50;
+            });
+            
+            // Genera pokeball dopo aver aggiornato la pista
+            setTimeout(() => {
+                generatePokeballs();
+            }, 200);
+        }
+
+        // Genera Pokeball casuali sul campo con variety
+        function generatePokeballs() {
+            const container = document.getElementById('pokemonContainer');
+            const existingBalls = container.querySelectorAll('.pokeball');
+            existingBalls.forEach(ball => ball.remove());
+            
+            const raceTrack = document.querySelector('.race-track');
+            const trackWidth = raceTrack.offsetWidth;
+            const trackHeight = raceTrack.offsetHeight;
+            
+            // Calcola numero di pokeball (ridotto) basato sulla grandezza del campo
+            const ballCount = Math.floor((trackWidth * trackHeight) / 25000) + 3;
+            
+            // Tipi di Pokeball con probabilità
+            const ballTypes = [
+                { type: 'normal', probability: 0.6 },  // 60% Pokeball normale
+                { type: 'ultra', probability: 0.3 },   // 30% Ultra Ball
+                { type: 'master', probability: 0.1 }   // 10% Master Ball
+            ];
+            
+            for (let i = 0; i < ballCount; i++) {
+                const ball = document.createElement('div');
+                ball.className = 'pokeball';
+                
+                // Seleziona tipo di pokeball in base alla probabilità
+                const randomType = Math.random();
+                let selectedType = 'normal';
+                let cumulativeProbability = 0;
+                
+                for (const ballType of ballTypes) {
+                    cumulativeProbability += ballType.probability;
+                    if (randomType <= cumulativeProbability) {
+                        selectedType = ballType.type;
+                        break;
+                    }
+                }
+                
+                ball.classList.add(selectedType);
+                
+                // Posiziona casualmente sul campo evitando i bordi
+                const xPosition = 100 + Math.random() * (trackWidth - 200);
+                const yPosition = 20 + Math.random() * (trackHeight - 60);
+                
+                ball.style.left = xPosition + 'px';
+                ball.style.top = yPosition + 'px';
+                
+                // Rotazione casuale iniziale
+                ball.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                // Ritardo animazione casuale
+                ball.style.animationDelay = `${Math.random() * 8}s`;
+                
+                container.appendChild(ball);
+            }
+        }
+        function addPlayer() {
+            if (currentPlayerCount < availablePokemon.length && !gameState.racing) {
+                currentPlayerCount++;
+                setupPlayers(currentPlayerCount);
+                updateLayout();
+                updatePlayerNamesPanel();
+                document.getElementById('playerCount').textContent = currentPlayerCount;
+            }
+        }
+
+        // Rimuovi giocatore
+        function removePlayer() {
+            if (currentPlayerCount > 2 && !gameState.racing) {
+                currentPlayerCount--;
+                setupPlayers(currentPlayerCount);
+                updateLayout();
+                updatePlayerNamesPanel();
+                document.getElementById('playerCount').textContent = currentPlayerCount;
+            }
+        }
+
+        // Imposta durata e ricalcola parametri
+        function setDuration() {
+            const input = document.getElementById('durationInput');
+            const duration = parseInt(input.value);
+            if (duration >= 10 && duration <= 600) {
+                gameState.raceDuration = duration;
+                document.getElementById('raceTimer').textContent = `⏱️ ${duration}.0s`;
+                // Ricalcola parametri di gara quando cambia la durata
+                calculateRaceParameters();
+            } else {
+                alert('La durata deve essere tra 10 e 600 secondi');
+                input.value = gameState.raceDuration;
+            }
+        }
+
+        // Countdown
+        function showCountdown() {
+            let count = 3;
+            
+            function displayCount() {
+                const countdownEl = document.createElement('div');
+                countdownEl.className = 'countdown';
+                countdownEl.textContent = count > 0 ? count : 'GO!';
+                document.body.appendChild(countdownEl);
+                
+                setTimeout(() => {
+                    countdownEl.remove();
+                    
+                    if (count > 0) {
+                        count--;
+                        setTimeout(displayCount, 1000);
+                    } else {
+                        startRunning();
+                    }
+                }, 1000);
+            }
+            
+            displayCount();
+        }
+
+        // Inizia corsa
+        function startRunning() {
+            gameState.racing = true;
+            gameState.startTime = Date.now();
+            gameState.endTime = gameState.startTime + (gameState.raceDuration * 1000);
+            gameState.frameCount = 0;
+            gameState.plotTwistTimer = 0;
+            gameState.lastEventFrame = 0;
+            gameState.finalSprintTriggered = false;
+            
+            document.getElementById('raceTimer').style.display = 'block';
+            gameState.raceTimer = setInterval(updateTimer, 50);
+            
+            pokemonData.forEach(pokemon => {
+                pokemon.element.classList.add('running');
+                pokemon.stamina = 100;
+            });
+            
+            raceLoop();
+        }
+
+        // Aggiorna timer
+        function updateTimer() {
+            const now = Date.now();
+            const remaining = Math.max(0, (gameState.endTime - now) / 1000);
+            
+            if (remaining > 0) {
+                document.getElementById('raceTimer').textContent = `⏱️ ${remaining.toFixed(1)}s`;
+            } else {
+                finishByTime();
+            }
+        }
+
+        // Termina per tempo
+        function finishByTime() {
+            gameState.racing = false;
+            gameState.finished = true;
+            clearInterval(gameState.raceTimer);
+            
+            let winner = pokemonData[0];
+            pokemonData.forEach(pokemon => {
+                if (pokemon.position > winner.position) {
+                    winner = pokemon;
+                }
+            });
+            
+            pokemonData.forEach(pokemon => {
+                pokemon.element.classList.remove('running', 'boost', 'stumble', 'super-boost', 'mega-boost');
+            });
+            
+            showVictoryBanner(winner.playerName, winner.name, 'Tempo scaduto!');
+        }
+
+        // Sistema di eventi semplificato con percentuali fisse
+        function triggerDramaticEvent(timeProgress, pokemon, index) {
+            const positions = pokemonData.map(p => p.position).sort((a, b) => b - a);
+            const rank = positions.indexOf(pokemon.position) + 1;
+            const leaderPosition = Math.max(...positions);
+            const distanceFromLeader = leaderPosition - pokemon.position;
+            
+            // Frequenza eventi costante indipendente dalla durata
+            const eventFrequency = 0.015 + (timeProgress * 0.01);
+            const randomChance = Math.random();
+            
+            // MEGA EVENTI RARI (0.5% di possibilità)
+            if (randomChance < 0.005 && gameState.frameCount - pokemon.lastBoostFrame > 60) {
+                pokemon.element.classList.add('mega-boost');
+                pokemon.effectFrames = 45;
+                pokemon.effectType = 'lightning';
+                pokemon.lastBoostFrame = gameState.frameCount;
+                pokemon.stamina = Math.min(100, pokemon.stamina + 30);
+                return 'lightning';
+            }
+            
+            // EVENTI DINAMICI
+            else if (randomChance < eventFrequency) {
+                // UNDERDOG COMEBACK - più probabile se sei ultimo
+                if (rank >= pokemonData.length - 1 && distanceFromLeader > gameState.baseVelocityPerFrame * 30) {
+                    pokemon.element.classList.add('super-boost');
+                    pokemon.effectFrames = 35;
+                    pokemon.effectType = 'comeback';
+                    pokemon.stamina = Math.min(100, pokemon.stamina + 20);
+                    return 'comeback';
+                }
+                
+                // LEADER STUMBLE - il primo può cadere
+                else if (rank === 1 && Math.random() < 0.4) {
+                    pokemon.element.classList.add('stumble');
+                    pokemon.effectFrames = 25;
+                    pokemon.effectType = 'leader-fall';
+                    pokemon.stamina = Math.max(10, pokemon.stamina - 25);
+                    return 'leader-fall';
+                }
+                
+                // MIDDLE PACK SURGE
+                else if (rank > 2 && rank < pokemonData.length - 1) {
+                    pokemon.element.classList.add('boost');
+                    pokemon.effectFrames = 20;
+                    pokemon.effectType = 'surge';
+                    return 'surge';
+                }
+                
+                // RANDOM BOOST
+                else if (Math.random() < 0.6) {
+                    pokemon.element.classList.add('boost');
+                    pokemon.effectFrames = 15;
+                    pokemon.effectType = 'boost';
+                    return 'boost';
+                }
+                
+                // RANDOM STUMBLE
+                else {
+                    pokemon.element.classList.add('stumble');
+                    pokemon.effectFrames = 12;
+                    pokemon.effectType = 'stumble';
+                    pokemon.stamina = Math.max(5, pokemon.stamina - 15);
+                    return 'stumble';
+                }
+            }
+            
+            return null;
+        }
+
+        // FINAL SPRINT semplificato
+        function triggerFinalSprint(timeRemaining) {
+            const finalSprintTime = Math.max(5, gameState.raceDuration * 0.15); // 15% del tempo totale
+            
+            if (timeRemaining <= finalSprintTime && !gameState.finalSprintTriggered) {
+                gameState.finalSprintTriggered = true;
+                
+                pokemonData.forEach((pokemon, index) => {
+                    const sprintChance = 0.3 + (pokemon.luck * 0.4);
+                    
+                    if (Math.random() < sprintChance) {
+                        pokemon.element.classList.add('super-boost');
+                        pokemon.effectFrames = 40;
+                        pokemon.effectType = 'final-sprint';
+                        pokemon.stamina = 100;
+                    }
+                });
+            }
+            
+            // Chaos mode negli ultimi secondi
+            const chaosTime = Math.max(3, gameState.raceDuration * 0.05); // 5% del tempo totale
+            if (timeRemaining <= chaosTime) {
+                pokemonData.forEach(pokemon => {
+                    if (Math.random() < 0.03) {
+                        const chaosEvent = Math.random();
+                        
+                        if (chaosEvent < 0.4) {
+                            pokemon.element.classList.add('mega-boost');
+                            pokemon.effectFrames = 25;
+                            pokemon.effectType = 'lightning';
+                        } else if (chaosEvent < 0.7) {
+                            pokemon.element.classList.add('stumble');
+                            pokemon.effectFrames = 15;
+                            pokemon.effectType = 'stumble';
+                        } else {
+                            pokemon.element.classList.add('boost');
+                            pokemon.effectFrames = 20;
+                            pokemon.effectType = 'boost';
+                        }
+                    }
+                });
+            }
+        }
+
+        // Loop gara con velocità matematicamente precisa
+        function raceLoop() {
+            if (!gameState.racing || gameState.finished) return;
+            
+            gameState.frameCount++;
+            gameState.plotTwistTimer++;
+            let winner = null;
+            
+            const timeElapsed = (Date.now() - gameState.startTime) / 1000;
+            const timeProgress = timeElapsed / gameState.raceDuration;
+            const timeRemaining = gameState.raceDuration - timeElapsed;
+            
+            // Trigger final sprint chaos
+            triggerFinalSprint(timeRemaining);
+            
+            pokemonData.forEach((pokemon, index) => {
+                // Decrementa frame effetti
+                if (pokemon.effectFrames > 0) pokemon.effectFrames--;
+                
+                // Rimuovi classi effetti
+                if (pokemon.effectFrames <= 0) {
+                    pokemon.element.classList.remove('boost', 'stumble', 'super-boost', 'mega-boost');
+                }
+                
+                // Velocità base matematicamente precisa
+                let currentVelocity = gameState.baseVelocityPerFrame;
+                
+                // Gestione stamina (influenza minima)
+                pokemon.stamina = Math.max(0, pokemon.stamina - 0.05);
+                const staminaMultiplier = 0.9 + (pokemon.stamina / 100) * 0.1; // Variazione minima
+                
+                // Variazione casuale minima per naturalezza
+                const randomVariation = 0.95 + (Math.random() * 0.1); // ±5%
+                currentVelocity *= randomVariation * staminaMultiplier;
+                
+                // Applica modificatori degli eventi come percentuali
+                const eventType = triggerDramaticEvent(timeProgress, pokemon, index);
+                
+                // Modificatori eventi basati sulla velocità base
+                if (pokemon.effectFrames > 0) {
+                    switch (pokemon.effectType) {
+                        case 'lightning':
+                            currentVelocity *= 3.0; // +200%
+                            break;
+                        case 'mega-boost':
+                            currentVelocity *= 2.5; // +150%
+                            break;
+                        case 'super-boost':
+                        case 'comeback':
+                        case 'final-sprint':
+                            currentVelocity *= 2.0; // +100%
+                            break;
+                        case 'boost':
+                        case 'surge':
+                            currentVelocity *= 1.5; // +50%
+                            break;
+                        case 'stumble':
+                        case 'leader-fall':
+                            currentVelocity *= 0.3; // -70%
+                            break;
+                    }
+                }
+                
+                // Applica movimento direttamente (no accelerazione/velocità complesse)
+                pokemon.position += currentVelocity;
+                
+                // Aggiungi piccole oscillazioni per naturalezza
+                const oscillation = Math.sin(gameState.frameCount * 0.1 + index) * 0.2;
+                pokemon.position += oscillation;
+                
+                // Limiti posizione
+                if (pokemon.position < 50) {
+                    pokemon.position = 50;
+                }
+                
+                // Aggiorna posizione visiva
+                pokemon.element.style.left = `${pokemon.position}px`;
+                
+                // Controlla vittoria - deve raggiungere esattamente il traguardo
+                if (pokemon.position >= gameState.raceDistance && !winner) {
+                    winner = pokemon;
+                }
+            });
+            
+            // Controllo vittoria
+            if (winner) {
+                gameState.racing = false;
+                gameState.finished = true;
+                clearInterval(gameState.raceTimer);
+                
+                pokemonData.forEach(pokemon => {
+                    pokemon.element.classList.remove('running', 'boost', 'stumble', 'super-boost', 'mega-boost');
+                });
+                
+                const finalTime = timeElapsed.toFixed(1);
+                showVictoryBanner(winner.playerName, winner.name, `Tempo: ${finalTime}s`);
+            } else {
+                requestAnimationFrame(() => raceLoop());
+            }
+        }
+
+        // Banner vittoria
+        function showVictoryBanner(playerName, pokemonName, timeText) {
+            const banner = document.createElement('div');
+            banner.className = 'victory-banner';
+            banner.innerHTML = `🏆 ${playerName} ha vinto! 🏆<br><small>con ${pokemonName}</small><br><small>${timeText}</small>`;
+            document.body.appendChild(banner);
+            
+            setTimeout(() => {
+                banner.remove();
+                resetRace();
+            }, 5000);
+        }
+
+        // Inizia gara
+        function startRace() {
+            if (gameState.racing || gameState.finished) return;
+            resetRace();
+            showCountdown();
+        }
+
+        // Reset
+        function resetRace() {
+            gameState.racing = false;
+            gameState.finished = false;
+            gameState.frameCount = 0;
+            gameState.plotTwistTimer = 0;
+            gameState.lastEventFrame = 0;
+            gameState.finalSprintTriggered = false;
+            
+            document.getElementById('raceTimer').style.display = 'none';
+            document.getElementById('raceTimer').textContent = `⏱️ ${gameState.raceDuration}.0s`;
+            
+            if (gameState.raceTimer) {
+                clearInterval(gameState.raceTimer);
+                gameState.raceTimer = null;
+            }
+            
+            document.querySelectorAll('.victory-banner').forEach(b => b.remove());
+            
+            pokemonData.forEach(pokemon => {
+                pokemon.position = 50;
+                pokemon.velocity = 0;
+                pokemon.acceleration = 0;
+                pokemon.effectFrames = 0;
+                pokemon.effectType = null;
+                pokemon.lastBoostFrame = 0;
+                pokemon.stamina = 100;
+                pokemon.element.style.left = '50px';
+                pokemon.element.classList.remove('running', 'boost', 'stumble', 'super-boost', 'mega-boost');
+            });
+        }
+
+        // Inizializza al caricamento
+        document.addEventListener('DOMContentLoaded', initGame);
+        
+        // Ricalcola parametri quando la finestra viene ridimensionata
+        window.addEventListener('resize', () => {
+            if (!gameState.racing) {
+                setTimeout(() => {
+                    updateLayout();
+                    calculateRaceParameters();
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
