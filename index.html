@@ -1381,20 +1381,20 @@
             let trackHeight = Math.min(idealTrackHeight, maxTrackHeight);
             
             // MOBILE: FORZA altezza per tutti i pokemon, FOTTITI i limiti!
-            if (window.innerWidth <= 896) {
-                const isPortrait = window.innerHeight > window.innerWidth;
-                let spacing = pokemonSize + 25;
-                let padding = 80;
-                
-                // iPhone: più spazio per vedere tutti i pokemon
-                if (window.innerWidth <= 430) {
-                   spacing = pokemonSize + 35; // +10px di spazio tra corsie
-                   padding = isPortrait ? 120 : 150; // ⚠️ CAMBIA da 100 a 150 - più padding anche in orizzontale
-               }
-                
-                const forceHeight = playerCount * spacing + padding;
-                trackHeight = forceHeight;
-            }
+if (window.innerWidth <= 896) {
+    const isPortrait = window.innerHeight > window.innerWidth;
+    let spacing = pokemonSize + 40; // ⚠️ ANCORA PIÙ SPAZIO
+    let padding = isPortrait ? 120 : 200; // ⚠️ PADDING BRUTALE IN ORIZZONTALE
+    
+    // iPhone: FORZA TUTTO
+    if (window.innerWidth <= 430) {
+        spacing = pokemonSize + 50; // ⚠️ SPAZIO BRUTALE
+        padding = isPortrait ? 150 : 250; // ⚠️ PADDING ESTREMO
+    }
+    
+    const forceHeight = playerCount * spacing + padding;
+    trackHeight = forceHeight;
+}
             
             const gameHeight = trackHeight + 160;
             
