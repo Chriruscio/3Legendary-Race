@@ -1351,7 +1351,14 @@
             const maxTrackHeight = maxScreenHeight - (isMobileLandscape ? 120 : 200);
             
             // Usa il minore tra ideale e massimo
-            const trackHeight = Math.min(idealTrackHeight, maxTrackHeight);
+            let trackHeight = Math.min(idealTrackHeight, maxTrackHeight);
+            
+            // SOLO SU MOBILE: forza altezza minima per vedere tutti i pokemon
+            if (window.innerWidth <= 896) {
+                const minRequiredHeight = playerCount * (pokemonSize + 20) + 40;
+                trackHeight = Math.max(trackHeight, minRequiredHeight);
+            }
+            
             const gameHeight = trackHeight + (isMobileLandscape ? 100 : 160);
             
             // Applica dimensioni calcolate
