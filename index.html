@@ -1867,10 +1867,18 @@
         window.addEventListener('orientationchange', () => {
             setTimeout(() => {
                 if (!gameState.racing) {
+                    // FORZA il ricalcolo completo
+                    console.log('Rotazione rilevata - ricalcolo layout');
                     updateLayout();
                     calculateRaceParameters();
+                    
+                    // Secondo ricalcolo dopo orientationchange
+                    setTimeout(() => {
+                        updateLayout();
+                        calculateRaceParameters();
+                    }, 200);
                 }
-            }, 500); // Delay maggiore per orientationchange
+            }, 500);
         });
     </script>
 </body>
