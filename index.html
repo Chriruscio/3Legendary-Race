@@ -180,6 +180,7 @@
             width: 100%;
             max-width: 1600px;
             min-height: 600px;
+            max-height: 80vh;
             background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
             border-radius: 20px;
             border: 5px solid #8B4513;
@@ -231,15 +232,7 @@
             background: #CC0000;
         }
 
-        /* Input nomi giocatori */
-        .player-name-input {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            background: #f5f5f5;
-            padding: 8px;
-            border-radius: 10px;
-        }
+        
         /* Container con scroll per input giocatori */
         #playerNamesContainer {
             max-height: 400px;
@@ -265,20 +258,9 @@
         #playerNamesContainer::-webkit-scrollbar-thumb:hover {
             background: #228B22;
         }
-        .player-name-input img {
-            width: 35px;
-            height: 35px;
-            margin-right: 10px;
-        }
+        
 
-        .player-name-input input {
-            flex: 1;
-            padding: 8px 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.2s;
-        }
+        
 
         .player-name-input {
             display: flex;
@@ -658,23 +640,7 @@
             50% { transform: scale(1.1); }
         }
 
-        /* Nomi giocatori */
-        .player-name-label {
-            position: absolute;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: bold;
-            z-index: 45;
-            pointer-events: none;
-            white-space: nowrap;
-            border: 2px solid #FFD700;
-            top: 50%;
-            right: -10px;
-            transform: translate(100%, -50%);
-        }
+        
 
         /* Pulsante Start */
         .start-btn {
@@ -755,57 +721,174 @@
             }
             
             .controls-sidebar {
-            width: 300px;
-            background: rgba(255, 255, 255, 0.95);
-            border-right: 3px solid #8B4513;
-            padding: 20px;
-            overflow-y: auto;
-            flex-shrink: 0;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.2);
-            max-height: calc(100vh - 80px);
-        }
+                width: 100%;
+                border-right: none;
+                border-bottom: 3px solid #8B4513;
+                max-height: 250px;
+                padding: 15px;
+            }
             
             .title {
-                font-size: 24px;
+                font-size: 22px;
             }
             
             .game-container {
-            position: relative;
-            width: 100%;
-            max-width: 1600px;
-            min-height: 400px;
-            max-height: 80vh;
-            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
-            border-radius: 20px;
-            border: 5px solid #8B4513;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
+                max-height: 70vh;
+                min-height: 400px;
+            }
+            
+            .race-track {
+                max-height: calc(70vh - 200px);
+            }
         }
 
         @media (max-width: 768px) {
+            .title-header {
+                padding: 8px 15px;
+            }
+            
             .title {
-                font-size: 20px;
+                font-size: 18px;
+            }
+            
+            .audio-controls {
+                gap: 8px;
+            }
+            
+            .audio-button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .controls-sidebar {
+                max-height: 220px;
+                padding: 12px;
+            }
+            
+            .controls-title {
+                font-size: 14px;
+            }
+            
+            .player-buttons button,
+            .duration-controls button {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+            
+            .player-name-input {
+                padding: 6px;
+                margin-bottom: 6px;
+            }
+            
+            .player-name-input img {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .player-name-input input {
+                font-size: 13px;
+                padding: 5px 8px;
             }
             
             .game-container {
-                height: 50vh;
+                max-height: 65vh;
                 min-height: 350px;
+                margin: 10px 5px;
             }
             
-            .pokemon {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .pokemon img {
-                width: 50px;
-                height: 50px;
+            .race-track {
+                max-height: calc(65vh - 180px);
+                bottom: 30px;
+                left: 30px;
+                right: 30px;
             }
             
             .race-timer {
-                font-size: 20px;
-                padding: 10px 20px;
+                font-size: 16px;
+                padding: 8px 15px;
+                top: 10px;
+                right: 10px;
+            }
+            
+            .start-btn {
+                font-size: 16px;
+                padding: 12px;
+            }
+            
+            .victory-banner {
+                font-size: 22px;
+                padding: 20px 30px;
+                margin: 0 10px;
+            }
+            
+            .countdown {
+                font-size: 120px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 16px;
+            }
+            
+            .controls-sidebar {
+                max-height: 200px;
+                padding: 10px;
+            }
+            
+            .player-name-input input {
+                font-size: 12px;
+            }
+            
+            .game-container {
+                max-height: 60vh;
+                min-height: 300px;
+                margin: 5px;
+            }
+            
+            .race-track {
+                max-height: calc(60vh - 160px);
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+            }
+            
+            .victory-banner {
+                font-size: 18px;
+                padding: 15px 20px;
+            }
+            
+            .countdown {
+                font-size: 100px;
+            }
+        }
+
+        @media (max-width: 896px) and (orientation: landscape) {
+            .game-container {
+                max-height: 85vh;
+            }
+            
+            .race-track {
+                max-height: calc(85vh - 180px);
+            }
+            
+            .controls-sidebar {
+                max-height: 180px;
+            }
+        }
+
+        button, input[type="range"] {
+            touch-action: manipulation;
+            min-height: 44px;
+        }
+
+        input[type="text"], input[type="number"] {
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            input[type="text"], input[type="number"] {
+                font-size: 14px;
             }
         }
     </style>
@@ -927,24 +1010,26 @@
         };
 
         // Sistema audio con avvio automatico
+        // Sistema audio con compatibilità mobile
         function initAudio() {
             try {
                 backgroundMusic = new Audio();
                 
-                // La tua canzone Pokémon di Giorgio Vanni
-                backgroundMusic.src = 'https://www.dropbox.com/scl/fi/s7dc0yizqloskqrp6dqbi/pokemon-gotta-catch-em-all-giorgio-vanni-sigla-completa-_9HHju9_hMM.mp3?rlkey=fq6hspev2p2ur9mtvl9rfn0ik&st=zhflkmub&dl=1';
+                // URL audio più compatibile (formato MP3 diretto)
+                backgroundMusic.src = 'https://archive.org/download/pokemon-theme-song/Pokemon%20Theme%20Song.mp3';
                 backgroundMusic.loop = true;
                 backgroundMusic.volume = 0.3;
+                backgroundMusic.preload = 'auto';
                 
+                // Gestione eventi audio
                 backgroundMusic.addEventListener('canplaythrough', () => {
-                    console.log('Canzone Pokémon caricata e pronta!');
-                    // Prova l'avvio automatico quando il file è pronto
-                    startMusicAutomatically();
+                    console.log('Audio caricato e pronto!');
                 });
                 
                 backgroundMusic.addEventListener('error', (e) => {
-                    console.log('Errore nel caricamento della canzone:', e);
+                    console.log('Errore audio:', e);
                     document.getElementById('musicToggle').textContent = '🎵 Audio Non Disponibile';
+                    document.getElementById('musicToggle').disabled = true;
                 });
                 
                 // Carica il file audio
@@ -952,65 +1037,41 @@
                 
             } catch (error) {
                 console.log('Audio non supportato:', error);
+                document.getElementById('musicToggle').textContent = '🎵 Audio Non Supportato';
+                document.getElementById('musicToggle').disabled = true;
             }
         }
 
-        // Funzione per avviare automaticamente la musica
-        function startMusicAutomatically() {
-            if (backgroundMusic && !musicPlaying) {
-                backgroundMusic.play().then(() => {
-                    musicPlaying = true;
-                    const button = document.getElementById('musicToggle');
-                    button.textContent = '🎵 Music ON';
-                    button.classList.remove('muted');
-                    console.log('🎵 Canzone Pokémon avviata automaticamente!');
-                }).catch(error => {
-                    console.log('Avvio automatico bloccato dal browser:', error);
-                    console.log('Clicca il pulsante per avviare la musica');
-                    // Fallback: se l'autoplay è bloccato, mostra un messaggio
-                    const button = document.getElementById('musicToggle');
-                    button.textContent = '🎵 Click per musica';
-                    button.style.background = '#FFD700';
-                    button.style.color = '#000';
-                });
-            }
-        }
-
-        // Aggiungi evento click per permettere l'avvio anche se autoplay fallisce
-        document.addEventListener('click', function enableAudio() {
-            if (!musicPlaying && backgroundMusic) {
-                startMusicAutomatically();
-                document.removeEventListener('click', enableAudio);
-            }
-        }, { once: true });
+        
 
         function toggleMusic() {
             const button = document.getElementById('musicToggle');
             
+            if (!backgroundMusic || button.disabled) {
+                return;
+            }
+            
             if (musicPlaying) {
-                if (backgroundMusic) {
-                    backgroundMusic.pause();
-                }
+                backgroundMusic.pause();
                 musicPlaying = false;
                 button.textContent = '🎵 Music OFF';
                 button.classList.add('muted');
-                button.style.background = '#FF4444';
-                console.log('Canzone Pokémon fermata');
             } else {
-                if (backgroundMusic) {
-                    backgroundMusic.play().then(() => {
+                // Promessa per gestire l'autoplay policy
+                const playPromise = backgroundMusic.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
                         musicPlaying = true;
                         button.textContent = '🎵 Music ON';
                         button.classList.remove('muted');
-                        button.style.background = '#32CD32';
-                        button.style.color = 'white';
-                        console.log('Canzone Pokémon avviata!');
+                        console.log('🎵 Musica avviata!');
                     }).catch(error => {
-                        console.log('Impossibile riprodurre la canzone:', error);
-                        button.textContent = '🎵 Click per attivare';
+                        console.log('Impossibile riprodurre:', error);
+                        button.textContent = '🎵 Tocca per attivare';
+                        button.style.background = '#FFD700';
+                        button.style.color = '#000';
                     });
-                } else {
-                    console.log('Audio non inizializzato');
                 }
             }
         }
