@@ -1366,45 +1366,48 @@
             }, 100);
 
             // Calcola altezza delle corsie effettiva
-            const laneHeight = trackHeight / playerCount;
+            const laneHeight = Math.max(trackHeight / playerCount, pokemonSize + 15);
             
             // Crea corsie e posiziona Pokémon
             pokemonData.forEach((pokemon, index) => {
-                const laneY = index * laneHeight;
-                const centerY = laneY + (laneHeight / 2) - (pokemonSize / 2);
+                // FORZA la posizione Y per ogni Pokémon
+                let centerY;
+                if (isMobileLandscape) {
+                    // Mobile landscape: distribuzione forzata
+                    centerY = 10 + (index * (pokemonSize + 15));
+                } else {
+                    // Desktop/mobile verticale: normale
+                    const laneY = index * laneHeight;
+                    centerY = laneY + (laneHeight / 2) - (pokemonSize / 2);
+                }
                 
-                // Crea corsia (linea divisoria) solo se ci sono più di 2 giocatori e non è la prima corsia
+                // Crea corsia (linea divisoria)
                 if (playerCount > 2 && index > 0) {
                     const laneLine = document.createElement('div');
                     laneLine.className = 'lane-line';
-                    laneLine.style.top = laneY + 'px';
+                    laneLine.style.top = (isMobileLandscape ? (index * (pokemonSize + 15)) : (index * laneHeight)) + 'px';
                     lanesContainer.appendChild(laneLine);
                 }
                 
-                // Crea elemento Pokémon con dimensioni dinamiche
+                // Crea elemento Pokémon
                 const pokemonEl = document.createElement('div');
                 pokemonEl.className = 'pokemon';
                 pokemonEl.id = pokemon.id;
                 pokemonEl.style.left = '50px';
                 pokemonEl.style.top = centerY + 'px';
-                
-                // Applica dimensioni dinamiche
+                pokemonEl.style.position = 'absolute';
                 pokemonEl.style.width = `${pokemonSize}px`;
                 pokemonEl.style.height = `${pokemonSize}px`;
                 
                 const img = document.createElement('img');
                 img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.sprite}.png`;
                 img.alt = pokemon.name;
-                
-                // Applica dimensioni dinamiche all'immagine
                 img.style.width = `${pokemonSize}px`;
                 img.style.height = `${pokemonSize}px`;
                 
                 pokemonEl.appendChild(img);
-                
                 container.appendChild(pokemonEl);
                 
-                // Aggiorna reference
                 pokemon.element = pokemonEl;
                 pokemon.position = 50;
             });
