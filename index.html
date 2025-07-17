@@ -1395,15 +1395,16 @@
             
             const gameHeight = trackHeight + 160;
             
-            // Applica dimensioni calcolate - MOBILE ignora maxScreenHeight
-            if (window.innerWidth <= 896) {
-                gameContainer.style.height = `${gameHeight}px`; // FORZA
-                raceTrack.style.height = `${trackHeight}px`; // FORZA
-            } else {
-                // Computer: normale
-                gameContainer.style.height = `${Math.min(gameHeight, maxScreenHeight)}px`;
-                raceTrack.style.height = `${trackHeight}px`;
-            }
+            // Applica dimensioni calcolate - MOBILE FORZA TUTTO SENZA LIMITI
+           if (window.innerWidth <= 896) {
+               gameContainer.style.height = `${gameHeight}px`; // FORZA
+               gameContainer.style.maxHeight = 'none'; // ⚠️ AGGIUNGI QUESTA
+               raceTrack.style.height = `${trackHeight}px`; // FORZA
+           } else {
+               // Computer: normale
+               gameContainer.style.height = `${Math.min(gameHeight, maxScreenHeight)}px`;
+               raceTrack.style.height = `${trackHeight}px`;
+           }
             
         
             
