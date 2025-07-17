@@ -1388,9 +1388,9 @@
                 
                 // iPhone: più spazio per vedere tutti i pokemon
                 if (window.innerWidth <= 430) {
-                    spacing = pokemonSize + 35; // +10px di spazio tra corsie
-                    padding = isPortrait ? 120 : 100; // Più padding in verticale
-                }
+                   spacing = pokemonSize + 35; // +10px di spazio tra corsie
+                   padding = isPortrait ? 120 : 150; // ⚠️ CAMBIA da 100 a 150 - più padding anche in orizzontale
+               }
                 
                 const forceHeight = playerCount * spacing + padding;
                 trackHeight = forceHeight;
