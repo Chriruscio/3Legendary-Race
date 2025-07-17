@@ -1349,10 +1349,22 @@
             // Usa il minore tra ideale e massimo
             let trackHeight = Math.min(idealTrackHeight, maxTrackHeight);
             
-            // SOLO SU MOBILE: assicura altezza minima per tutti i pokemon
+            // MOBILE: FORZA altezza per tutti i pokemon, FOTTITI i limiti!
             if (window.innerWidth <= 896) {
-                const minRequiredHeight = playerCount * (pokemonSize + 25) + 60;
-                trackHeight = Math.max(trackHeight, minRequiredHeight);
+                const forceHeight = playerCount * (pokemonSize + 25) + 80;
+                trackHeight = forceHeight; // FORZA senza limiti!
+            }
+            
+            const gameHeight = trackHeight + 160;
+            
+            // Applica dimensioni calcolate - MOBILE ignora maxScreenHeight
+            if (window.innerWidth <= 896) {
+                gameContainer.style.height = `${gameHeight}px`; // FORZA
+                raceTrack.style.height = `${trackHeight}px`; // FORZA
+            } else {
+                // Computer: normale
+                gameContainer.style.height = `${Math.min(gameHeight, maxScreenHeight)}px`;
+                raceTrack.style.height = `${trackHeight}px`;
             }
             
             const gameHeight = trackHeight + 160;
