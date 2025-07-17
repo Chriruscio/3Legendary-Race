@@ -1351,8 +1351,8 @@
             const maxTrackHeight = maxScreenHeight - (isMobileLandscape ? 120 : 200);
             
             // Usa il minore tra ideale e massimo
-            const trackHeight = Math.min(idealTrackHeight, maxTrackHeight);
-            const gameHeight = trackHeight + 160;
+            const trackHeight = Math.max(Math.min(idealTrackHeight, maxTrackHeight), playerCount * (pokemonSize + 15));
+            const gameHeight = trackHeight + (isMobileLandscape ? 100 : 160);
             
             // Applica dimensioni calcolate
             gameContainer.style.height = `${Math.min(gameHeight, maxScreenHeight)}px`;
