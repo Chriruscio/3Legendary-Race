@@ -715,114 +715,101 @@
         }
 
         /* Responsive */
-        @media (max-width: 1024px) {
-            .main-layout {
-                flex-direction: column;
-            }
-            
-            .controls-sidebar {
-                width: 100%;
-                border-right: none;
-                border-bottom: 3px solid #8B4513;
-                max-height: 250px;
-                padding: 15px;
-            }
-            
-            .title {
-                font-size: 22px;
-            }
-            
-            .game-container {
-                max-height: 70vh;
-                min-height: 400px;
-            }
-            
-            .race-track {
-                max-height: calc(70vh - 200px);
-            }
-        }
-
         @media (max-width: 768px) {
             .title-header {
-                padding: 8px 15px;
+                padding: 5px 10px;
+                flex-direction: column;
+                gap: 5px;
             }
             
             .title {
-                font-size: 18px;
+                font-size: 16px;
+                order: 1;
             }
             
             .audio-controls {
-                gap: 8px;
+                order: 2;
+                gap: 5px;
             }
             
             .audio-button {
-                padding: 6px 12px;
-                font-size: 12px;
+                padding: 4px 8px;
+                font-size: 10px;
+            }
+            
+            .volume-control {
+                width: 50px;
+            }
+            
+            .main-layout {
+                padding-top: 70px;
             }
             
             .controls-sidebar {
-                max-height: 220px;
-                padding: 12px;
+                max-height: 180px;
+                padding: 8px;
             }
             
             .controls-title {
-                font-size: 14px;
+                font-size: 12px;
+                margin-bottom: 8px;
             }
             
             .player-buttons button,
             .duration-controls button {
-                padding: 6px 10px;
-                font-size: 12px;
+                padding: 4px 8px;
+                font-size: 10px;
             }
             
             .player-name-input {
-                padding: 6px;
-                margin-bottom: 6px;
+                padding: 4px;
+                margin-bottom: 4px;
+                min-height: 40px;
             }
             
             .player-name-input img {
-                width: 28px;
-                height: 28px;
+                width: 24px;
+                height: 24px;
             }
             
             .player-name-input input {
-                font-size: 13px;
-                padding: 5px 8px;
+                font-size: 11px;
+                padding: 4px 6px;
             }
             
             .game-container {
-                max-height: 65vh;
-                min-height: 350px;
-                margin: 10px 5px;
+                max-height: 60vh;
+                min-height: 280px;
+                margin: 8px 4px;
             }
             
             .race-track {
-                max-height: calc(65vh - 180px);
-                bottom: 30px;
-                left: 30px;
-                right: 30px;
+                max-height: calc(60vh - 160px);
+                bottom: 25px;
+                left: 25px;
+                right: 25px;
             }
             
             .race-timer {
-                font-size: 16px;
-                padding: 8px 15px;
-                top: 10px;
-                right: 10px;
+                font-size: 14px;
+                padding: 6px 12px;
+                top: 8px;
+                right: 8px;
             }
             
             .start-btn {
-                font-size: 16px;
-                padding: 12px;
+                font-size: 14px;
+                padding: 10px;
             }
             
             .victory-banner {
-                font-size: 22px;
-                padding: 20px 30px;
-                margin: 0 10px;
+                font-size: 18px;
+                padding: 15px 20px;
+                margin: 0 8px;
             }
             
             .countdown {
-                font-size: 120px;
+                font-size: 80px;
             }
         }
 
@@ -1009,30 +996,28 @@
             targetDistance: 0 // Distanza target per il traguardo
         };
 
-        // Sistema audio con avvio automatico
         // Sistema audio con compatibilità mobile
         function initAudio() {
             try {
                 backgroundMusic = new Audio();
                 
-                // URL audio più compatibile (formato MP3 diretto)
-                backgroundMusic.src = 'https://archive.org/download/pokemon-theme-song/Pokemon%20Theme%20Song.mp3';
+                // URL audio Pokémon funzionante
+                backgroundMusic.src = 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav';
                 backgroundMusic.loop = true;
                 backgroundMusic.volume = 0.3;
                 backgroundMusic.preload = 'auto';
                 
-                // Gestione eventi audio
+                // Per mobile - deve essere attivato da user gesture
                 backgroundMusic.addEventListener('canplaythrough', () => {
                     console.log('Audio caricato e pronto!');
                 });
                 
                 backgroundMusic.addEventListener('error', (e) => {
                     console.log('Errore audio:', e);
-                    document.getElementById('musicToggle').textContent = '🎵 Audio Non Disponibile';
-                    document.getElementById('musicToggle').disabled = true;
+                    // Prova URL alternativo
+                    backgroundMusic.src = 'https://opengameart.org/sites/default/files/Pokemon%20Center%20-%20Pokemon%20RBYGSC.mp3';
                 });
                 
-                // Carica il file audio
                 backgroundMusic.load();
                 
             } catch (error) {
