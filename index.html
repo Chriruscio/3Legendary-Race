@@ -888,7 +888,30 @@
                 max-height: 180px;
             }
         }
-
+        /* Fix specifico per mobile landscape - forza il ricalcolo del layout */
+        @media (max-width: 896px) and (orientation: landscape) and (max-height: 500px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            
+            .controls-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 3px solid #8B4513;
+                max-height: 120px;
+                overflow-y: auto;
+            }
+            
+            .game-container {
+                max-height: 70vh;
+                min-height: 280px;
+            }
+            
+            .race-track {
+                max-height: calc(70vh - 160px);
+                min-height: 200px;
+            }
+        }
         button, input[type="range"] {
             touch-action: manipulation;
             min-height: 44px;
@@ -1287,24 +1310,45 @@
             
             // Calcolo dinamico delle dimensioni basato sul numero di giocatori
             const playerCount = pokemonData.length;
-            const maxScreenHeight = window.innerHeight * 0.8; // 80% dell'altezza schermo
-            
-            // Calcola dimensioni Pokémon dinamiche (da 130px a 70px)
-            let pokemonSize;
-            if (playerCount <= 4) {
-                pokemonSize = 130; // Dimensione massima
-            } else if (playerCount <= 8) {
-                pokemonSize = 110; // Dimensione media
-            } else if (playerCount <= 12) {
-                pokemonSize = 90; // Dimensione ridotta
+            // Rileva se siamo su mobile landscape
+            const isMobileLandscape = window.innerWidth > window.innerHeight && 
+                                    window.innerWidth <= 896 && 
+                                    window.innerHeight <= 500;
+            let maxScreenHeight;
+            if (isMobileLandscape) {
+                maxScreenHeight = window.innerHeight * 0.65; // Ridotto per mobile landscape
             } else {
-                pokemonSize = 70; // Dimensione minima
+                maxScreenHeight = window.innerHeight * 0.8; // Normale
+            }
+            
+            // Calcola dimensioni Pokémon dinamiche
+            let pokemonSize;
+            if (isMobileLandscape) {
+                // Dimensioni ridotte per mobile landscape
+                if (playerCount <= 4) {
+                    pokemonSize = 80;
+                } else if (playerCount <= 8) {
+                    pokemonSize = 70;
+                } else {
+                    pokemonSize = 60;
+                }
+            } else {
+                // Dimensioni normali
+                if (playerCount <= 4) {
+                    pokemonSize = 130;
+                } else if (playerCount <= 8) {
+                    pokemonSize = 110;
+                } else if (playerCount <= 12) {
+                    pokemonSize = 90;
+                } else {
+                    pokemonSize = 70;
+                }
             }
             
             // Calcola altezza corsia dinamica
-            const minLaneHeight = pokemonSize + 20; // Pokémon + spazio buffer
-            const idealTrackHeight = playerCount * minLaneHeight + 60;
-            const maxTrackHeight = maxScreenHeight - 200; // Spazio per controlli
+            const minLaneHeight = pokemonSize + (isMobileLandscape ? 10 : 20);
+            const idealTrackHeight = playerCount * minLaneHeight + (isMobileLandscape ? 30 : 60);
+            const maxTrackHeight = maxScreenHeight - (isMobileLandscape ? 120 : 200);
             
             // Usa il minore tra ideale e massimo
             const trackHeight = Math.min(idealTrackHeight, maxTrackHeight);
@@ -1818,6 +1862,15 @@
                     calculateRaceParameters();
                 }, 100);
             }
+        });
+        // Gestisce rotazione schermo su mobile
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                if (!gameState.racing) {
+                    updateLayout();
+                    calculateRaceParameters();
+                }
+            }, 500); // Delay maggiore per orientationchange
         });
     </script>
 </body>
